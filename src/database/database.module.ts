@@ -1,5 +1,11 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
+import {
+  Global,
+  Inject,
+  Logger,
+  Module,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
@@ -34,6 +40,8 @@ import { DB_CONNECTION, PG_POOL } from './injectionTokens';
   exports: [DB_CONNECTION],
 })
 export class DatabaseModule implements OnApplicationShutdown {
+  private readonly logger = new Logger(DatabaseModule.name);
+
   constructor(@Inject(PG_POOL) private pgPool: Pool | null = null) {}
 
   async onApplicationShutdown() {
@@ -41,7 +49,7 @@ export class DatabaseModule implements OnApplicationShutdown {
       await this.pgPool.end();
       this.pgPool = null;
 
-      console.log('PG Pool closed');
+      this.logger.log('PG Pool closed');
     }
   }
 }

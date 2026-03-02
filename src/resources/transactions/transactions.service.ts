@@ -6,10 +6,10 @@ import {
 
 import { and, eq, lt, gte, sum, sql } from 'drizzle-orm';
 
+import { transactions } from '../../database/schema';
 import { DB_CONNECTION } from '../../database/injectionTokens';
 
 import type { TDatabase, TTransactionSelect } from '../../types';
-import { transactions } from 'src/database/schema';
 
 @Injectable()
 export class TransactionsService {
