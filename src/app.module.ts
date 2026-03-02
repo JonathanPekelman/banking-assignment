@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { validateConfig } from './config/validateEnv';
 import { DatabaseModule } from './database/database.module';
+import { AccountsModule } from './resources/accounts/accounts.module';
+import { TransactionsModule } from './resources/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { DatabaseModule } from './database/database.module';
       validate: validateConfig,
     }),
     DatabaseModule,
+    AccountsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

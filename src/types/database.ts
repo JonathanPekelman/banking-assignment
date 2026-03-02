@@ -4,7 +4,7 @@ import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import * as schemas from '../database/schema';
 
 export type TSchema = typeof schemas;
-export type TDb = NodePgDatabase<TSchema>;
+export type TDatabase = NodePgDatabase<TSchema>;
 
 export type TPersonSelect = InferSelectModel<typeof schemas.persons>;
 export type TPersonInsert = InferInsertModel<typeof schemas.persons>;

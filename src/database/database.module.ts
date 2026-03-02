@@ -5,7 +5,7 @@ import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
 import * as schemas from './schema';
-import { TDb } from '../types';
+import { TDatabase } from '../types';
 import { DB_CONNECTION, PG_POOL } from './injectionTokens';
 
 @Global()
@@ -26,7 +26,7 @@ import { DB_CONNECTION, PG_POOL } from './injectionTokens';
     {
       provide: DB_CONNECTION,
       inject: [PG_POOL],
-      useFactory: (pool: Pool): TDb => {
+      useFactory: (pool: Pool): TDatabase => {
         return drizzle(pool, { schema: schemas });
       },
     },
