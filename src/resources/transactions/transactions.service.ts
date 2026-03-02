@@ -32,10 +32,11 @@ export class TransactionsService {
     }
   }
 
-  // TODO: Create getTransactionsByAccountId method and add date range functionality
-
-  async getAmountWithdrawnToday(accountId: number): Promise<string> {
-    const [result] = await this.db
+  async getAmountWithdrawnToday(
+    accountId: number,
+    db: TDatabase = this.db,
+  ): Promise<string> {
+    const [result] = await db
       .select({ total: sum(transactions.value) })
       .from(transactions)
       .where(
