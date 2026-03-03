@@ -11,10 +11,20 @@ import {
 import { AccountsService } from './accounts.service';
 import { ZodValidationPipe } from '../../pipes/zod.pipe';
 import {
-  accountInsertSchema,
   fundsBodySchema,
+  accountInsertSchema,
   statementQuerySchema,
 } from '../../schemas/account.schema';
+import {
+  ApiAccounts,
+  ApiGetBalance,
+  ApiBlockAccount,
+  ApiDepositFunds,
+  ApiGetStatement,
+  ApiCreateAccount,
+  ApiWithdrawFunds,
+  ApiUnblockAccount,
+} from './accounts.swagger';
 
 import type {
   TAccountInsert,
@@ -22,11 +32,13 @@ import type {
   IAccountStatement,
 } from '../../types';
 
+@ApiAccounts
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Post()
+  @ApiCreateAccount()
   async createAccount(
     @Body(new ZodValidationPipe(accountInsertSchema))
     newAccount: TAccountInsert,
@@ -35,6 +47,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/deposit')
+  @ApiDepositFunds()
   async depositFunds(
     @Param('accountId', ParseIntPipe) accountId: number,
     @Body(new ZodValidationPipe(fundsBodySchema)) body: { amount: string },
@@ -43,6 +56,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/withdraw')
+  @ApiWithdrawFunds()
   async withdrawFunds(
     @Param('accountId', ParseIntPipe) accountId: number,
     @Body(new ZodValidationPipe(fundsBodySchema)) body: { amount: string },
@@ -51,6 +65,7 @@ export class AccountsController {
   }
 
   @Get(':accountId/statement')
+  @ApiGetStatement()
   async getStatement(
     @Param('accountId', ParseIntPipe) accountId: number,
     @Query(new ZodValidationPipe(statementQuerySchema))
@@ -60,6 +75,7 @@ export class AccountsController {
   }
 
   @Get(':accountId/balance')
+  @ApiGetBalance()
   async getAccountBalance(
     @Param('accountId', ParseIntPipe) accountId: number,
   ): Promise<string> {
@@ -67,6 +83,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/block')
+  @ApiBlockAccount()
   async blockAccount(
     @Param('accountId', ParseIntPipe) accountId: number,
   ): Promise<TAccountSelect> {
@@ -74,6 +91,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/unblock')
+  @ApiUnblockAccount()
   async unblockAccount(
     @Param('accountId', ParseIntPipe) accountId: number,
   ): Promise<TAccountSelect> {

@@ -149,61 +149,66 @@ export class AccountsService {
     from?: Date,
     to?: Date,
   ): Promise<IAccountStatement> {
-    return this.db.transaction(async (tx) => {
-      const account = await this.findAccountById(accountId, tx);
+    try {
+      return await this.db.transaction(async (tx) => {
+        const account = await this.findAccountById(accountId, tx);
 
-      const statementTransactions = await tx
-        .select()
-        .from(transactions)
-        .where(
-          and(
-            eq(transactions.accountId, accountId),
-            from ? gte(transactions.transactionDate, from) : undefined,
-            to ? lte(transactions.transactionDate, to) : undefined,
-          ),
-        )
-        .orderBy(transactions.transactionDate);
-
-      let txSumAfterEndPoint = '0';
-      // If end date was not specified, the closing balance is the same as the current balance
-      if (to) {
-        // Sum up all transactions AFTER end date
-        const [afterResult] = await tx
-          .select({ total: sum(transactions.value) })
+        const statementTransactions = await tx
+          .select()
           .from(transactions)
           .where(
             and(
               eq(transactions.accountId, accountId),
-              gt(transactions.transactionDate, to),
+              from ? gte(transactions.transactionDate, from) : undefined,
+              to ? lte(transactions.transactionDate, to) : undefined,
             ),
-          );
+          )
+          .orderBy(transactions.transactionDate);
 
-        txSumAfterEndPoint = afterResult.total ?? '0';
-      }
+        let txSumAfterEndPoint = '0';
+        // If end date was not specified, the closing balance is the same as the current balance
+        if (to) {
+          // Sum up all transactions AFTER end date
+          const [afterResult] = await tx
+            .select({ total: sum(transactions.value) })
+            .from(transactions)
+            .where(
+              and(
+                eq(transactions.accountId, accountId),
+                gt(transactions.transactionDate, to),
+              ),
+            );
 
-      // Current balance minus everything after end date equals closing balance
-      const closingBalance = new Decimal(account.balance)
-        .minus(txSumAfterEndPoint)
-        .toFixed(4);
+          txSumAfterEndPoint = afterResult.total ?? '0';
+        }
 
-      // Sum of all transactions from start point
-      const txSumFromStartPoint = statementTransactions.reduce(
-        (acc, t) => acc.plus(t.value),
-        new Decimal(0),
-      );
+        // Current balance minus everything after end date equals closing balance
+        const closingBalance = new Decimal(account.balance)
+          .minus(txSumAfterEndPoint)
+          .toFixed(4);
 
-      // Current balance minus txSumFromStartPoint equals opening balance
-      const openingBalance = new Decimal(closingBalance)
-        .minus(txSumFromStartPoint)
-        .toFixed(4);
+        // Sum of all transactions from start point
+        const txSumFromStartPoint = statementTransactions.reduce(
+          (acc, t) => acc.plus(t.value),
+          new Decimal(0),
+        );
 
-      return {
-        account,
-        openingBalance,
-        closingBalance,
-        transactions: statementTransactions,
-      };
-    });
+        // Current balance minus txSumFromStartPoint equals opening balance
+        const openingBalance = new Decimal(closingBalance)
+          .minus(txSumFromStartPoint)
+          .toFixed(4);
+
+        return {
+          account,
+          openingBalance,
+          closingBalance,
+          transactions: statementTransactions,
+        };
+      });
+    } catch (err) {
+      if (err instanceof HttpException) throw err;
+      throw new InternalServerErrorException('Failed to retrieve statement.');
+    }
   }
 
   async getBalance(accountId: number): Promise<string> {
