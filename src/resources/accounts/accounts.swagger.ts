@@ -1,4 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
+
+const today = new Date();
+const toExample = today.toISOString().slice(0, 10);
+const fromExample = new Date(
+  today.getFullYear(),
+  today.getMonth() - 1,
+  today.getDate(),
+)
+  .toISOString()
+  .slice(0, 10);
 import {
   ApiBody,
   ApiOperation,
@@ -159,14 +169,14 @@ export const ApiGetStatement = () =>
       required: false,
       type: String,
       description: 'Start date (YYYY-MM-DD)',
-      example: '2026-01-01',
+      example: fromExample,
     }),
     ApiQuery({
       name: 'to',
       required: false,
       type: String,
       description: 'End date inclusive (YYYY-MM-DD)',
-      example: '2026-01-31',
+      example: toExample,
     }),
     ApiResponse({
       status: 200,
