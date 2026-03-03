@@ -27,12 +27,11 @@ External boundaries:
 
 ## Module Map
 
-```mermaid
-graph TD
-    AppModule --> ConfigModule
-    AppModule --> DatabaseModule
-    AppModule --> AccountsModule
-    AppModule --> TransactionsModule
+```
+AppModule --> ConfigModule
+AppModule --> DatabaseModule
+AppModule --> AccountsModule
+AppModule --> TransactionsModule
 
     AccountsModule --> TransactionsModule
     AccountsModule --> AccountsController
@@ -104,30 +103,29 @@ On any unhandled exception, `GlobalExceptionFilter` catches it and returns a con
 
 ## Database Schema
 
-```mermaid
-erDiagram
-    persons {
-        serial person_id PK
-        text name
-        text document UK
-        date birth_date
-    }
+```
+persons {
+    serial person_id PK
+    text name
+    text document UK
+    date birth_date
+}
 
-    accounts {
-        serial account_id PK
-        integer person_id FK
-        numeric balance
-        numeric daily_withdrawal_limit
-        boolean is_active
-        integer account_type
-    }
+accounts {
+    serial account_id PK
+    integer person_id FK
+    numeric balance
+    numeric daily_withdrawal_limit
+    boolean is_active
+    integer account_type
+}
 
-    transactions {
-        serial transaction_id PK
-        integer account_id FK
-        numeric value
-        timestamp transaction_date
-    }
+transactions {
+    serial transaction_id PK
+    integer account_id FK
+    numeric value
+    timestamp transaction_date
+}
 ```
 
 Monetary columns (`balance`, `daily_withdrawal_limit`, `value`) use `numeric(15, 4)` - an exact decimal type in PostgreSQL that avoids floating-point representation errors.

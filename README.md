@@ -94,6 +94,7 @@ npm run seed:persons
 
 ## Running Tests
 
+### Unit Tests
 ```bash
 # Unit tests
 npm test
@@ -102,6 +103,17 @@ npm test
 npm run test:cov
 ```
 
+### E2E Tests
+```bash
+# Create a .env.test file based on the test example file (edit what you need)
+cp .env.test.example .env.test
+
+# Run postgres container (If you have pg running locally that also works)
+docker compose up db
+
+# Run E2E tests
+npm run test:e2e
+```
 ---
 
 ## API Reference
