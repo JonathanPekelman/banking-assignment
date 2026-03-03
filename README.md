@@ -15,6 +15,7 @@ Supports account creation, fund deposits and withdrawals, balance queries, accou
 | Database ORM | Drizzle ORM |
 | Validation | Zod |
 | Monetary operations | Decimal.js |
+| API documentation | Swagger |
 
 ---
 
@@ -132,7 +133,7 @@ All endpoints are prefixed with `/accounts`. Interactive documentation is availa
 
 ### Notes
 
-- All monetary values (`balance`, `dailyWithdrawalLimit`, `amount`) are strings representing decimal numbers (e.g. `"100.00"`)
+- All monetary values (`balance`, `dailyWithdrawalLimit`, `amount`) are strings representing decimal numbers with 4 decimal places (e.g. `"100.0000"`)
 - `accountType` must be an integer between 1 and 5
 - Statement dates are inclusive - `to` defaults to end-of-day (23:59:59 UTC)
 - Withdrawals are rejected if they would exceed the account's `dailyWithdrawalLimit`

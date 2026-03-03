@@ -42,14 +42,10 @@ import { DB_CONNECTION, PG_POOL } from './injectionTokens';
 export class DatabaseModule implements OnApplicationShutdown {
   private readonly logger = new Logger(DatabaseModule.name);
 
-  constructor(@Inject(PG_POOL) private pgPool: Pool | null = null) {}
+  constructor(@Inject(PG_POOL) private pgPool: Pool) {}
 
   async onApplicationShutdown() {
-    if (this.pgPool) {
-      await this.pgPool.end();
-      this.pgPool = null;
-
-      this.logger.log('PG Pool closed');
-    }
+    await this.pgPool.end();
+    this.logger.log('PG Pool closed');
   }
 }

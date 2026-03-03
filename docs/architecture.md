@@ -82,7 +82,7 @@ PostgreSQL                  executes SQL, returns rows
 AccountsService             returns updated account row
     |
     V
-LoggingInterceptor          logs "<-- POST /accounts/1/deposit 201 12ms"
+LoggingInterceptor          logs "<-- POST /accounts/1/deposit 200 12ms"
     |
     V
 HTTP Response               { accountId, personId, balance, ... }

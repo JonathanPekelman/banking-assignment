@@ -1,4 +1,12 @@
 import { applyDecorators } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 const today = new Date();
 const toExample = today.toISOString().slice(0, 10);
@@ -9,14 +17,6 @@ const fromExample = new Date(
 )
   .toISOString()
   .slice(0, 10);
-import {
-  ApiBody,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
 
 const accountSchema = {
   type: 'object',
@@ -130,7 +130,7 @@ export const ApiDepositFunds = () =>
     ApiParam(accountIdParam),
     fundsBody('Amount to deposit', '100.00'),
     ApiResponse({
-      status: 201,
+      status: 200,
       description: 'Funds deposited',
       schema: accountSchema,
     }),
@@ -145,7 +145,7 @@ export const ApiWithdrawFunds = () =>
     ApiParam(accountIdParam),
     fundsBody('Amount to withdraw', '50.00'),
     ApiResponse({
-      status: 201,
+      status: 200,
       description: 'Funds withdrawn',
       schema: accountSchema,
     }),
@@ -204,7 +204,7 @@ export const ApiBlockAccount = () =>
     ApiOperation({ summary: 'Block an account' }),
     ApiParam(accountIdParam),
     ApiResponse({
-      status: 201,
+      status: 200,
       description: 'Account blocked',
       schema: accountSchema,
     }),
@@ -216,7 +216,7 @@ export const ApiUnblockAccount = () =>
     ApiOperation({ summary: 'Unblock an account' }),
     ApiParam(accountIdParam),
     ApiResponse({
-      status: 201,
+      status: 200,
       description: 'Account unblocked',
       schema: accountSchema,
     }),

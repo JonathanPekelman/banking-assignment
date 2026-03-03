@@ -98,13 +98,13 @@ describe('Accounts (e2e)', () => {
   // --- POST /accounts/:id/deposit --------------------------------------------
 
   describe('POST /accounts/:accountId/deposit', () => {
-    it('returns 201 and increases the balance', async () => {
+    it('returns 200 and increases the balance', async () => {
       const account = await createAccount({ balance: '100.00' });
 
       const res = await request(app.getHttpServer())
         .post(`/accounts/${account.accountId}/deposit`)
         .send({ amount: '50.00' })
-        .expect(201);
+        .expect(200);
 
       expect((res.body as TAccountSelect).balance).toBe('150.0000');
     });
@@ -129,13 +129,13 @@ describe('Accounts (e2e)', () => {
   // --- POST /accounts/:id/withdraw -------------------------------------------
 
   describe('POST /accounts/:accountId/withdraw', () => {
-    it('returns 201 and decreases the balance', async () => {
+    it('returns 200 and decreases the balance', async () => {
       const account = await createAccount({ balance: '200.00' });
 
       const res = await request(app.getHttpServer())
         .post(`/accounts/${account.accountId}/withdraw`)
         .send({ amount: '75.00' })
-        .expect(201);
+        .expect(200);
 
       expect((res.body as TAccountSelect).balance).toBe('125.0000');
     });
@@ -248,12 +248,12 @@ describe('Accounts (e2e)', () => {
   // --- POST /accounts/:id/block ----------------------------------------------
 
   describe('POST /accounts/:accountId/block', () => {
-    it('returns 201 and sets isActive to false', async () => {
+    it('returns 200 and sets isActive to false', async () => {
       const account = await createAccount();
 
       const res = await request(app.getHttpServer())
         .post(`/accounts/${account.accountId}/block`)
-        .expect(201);
+        .expect(200);
 
       expect((res.body as TAccountSelect).isActive).toBe(false);
     });
@@ -268,12 +268,12 @@ describe('Accounts (e2e)', () => {
   // --- POST /accounts/:id/unblock --------------------------------------------
 
   describe('POST /accounts/:accountId/unblock', () => {
-    it('returns 201 and sets isActive to true', async () => {
+    it('returns 200 and sets isActive to true', async () => {
       const account = await createAccount({ isActive: false });
 
       const res = await request(app.getHttpServer())
         .post(`/accounts/${account.accountId}/unblock`)
-        .expect(201);
+        .expect(200);
 
       expect((res.body as TAccountSelect).isActive).toBe(true);
     });

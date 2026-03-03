@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -47,6 +49,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/deposit')
+  @HttpCode(HttpStatus.OK)
   @ApiDepositFunds()
   async depositFunds(
     @Param('accountId', ParseIntPipe) accountId: number,
@@ -56,6 +59,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/withdraw')
+  @HttpCode(HttpStatus.OK)
   @ApiWithdrawFunds()
   async withdrawFunds(
     @Param('accountId', ParseIntPipe) accountId: number,
@@ -83,6 +87,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/block')
+  @HttpCode(HttpStatus.OK)
   @ApiBlockAccount()
   async blockAccount(
     @Param('accountId', ParseIntPipe) accountId: number,
@@ -91,6 +96,7 @@ export class AccountsController {
   }
 
   @Post(':accountId/unblock')
+  @HttpCode(HttpStatus.OK)
   @ApiUnblockAccount()
   async unblockAccount(
     @Param('accountId', ParseIntPipe) accountId: number,
